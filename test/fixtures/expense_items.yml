@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  expense: one
+  name_of_item_in_expense: MyString
+  amount_of_item: 
+  amount_of_item: 
+  assigned_to_user: 
+
+two:
+  expense: two
+  name_of_item_in_expense: MyString
+  amount_of_item: 
+  amount_of_item: 
+  assigned_to_user: 

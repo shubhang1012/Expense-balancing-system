@@ -1,0 +1,11 @@
+one:
+  payment_by: one
+  payment_to: two
+  amount_paid: 100.00
+  note: Test payment
+
+two:
+  payment_by: two
+  payment_to: one
+  amount_paid: 50.00
+  note: Another test payment

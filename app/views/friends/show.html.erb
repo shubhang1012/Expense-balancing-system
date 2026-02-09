@@ -1,0 +1,51 @@
+<div class="container mt-5">
+  <h3>Transactions with <%= @friend.name || @friend.email %></h3>
+
+  <% if @balance.present? %>
+    <div class="card p-3 mb-4 text-center shadow-sm">
+      <% if @balance[:net_balance] > 0 %>
+        <h4 class="text-success"><%= @friend.name || @friend.email %> owes you <%= number_to_currency(@balance[:net_balance], unit: "₹") %></h4>
+      <% elsif @balance[:net_balance] < 0 %>
+        <h4 class="text-danger">You owe <%= @friend.name || @friend.email %> <%= number_to_currency(@balance[:net_balance].abs, unit: "₹") %></h4>
+      <% else %>
+        <h4 class="text-muted">You’re all settled up</h4>
+      <% end %>
+    </div>
+  <% end %>
+
+  <h4>Shared Expenses</h4>
+  <table class="table table-striped mt-3">
+    <thead class="table-dark">
+      <tr>
+        <th>Expense</th>
+        <th>Created By</th>
+        <th>Total</th>
+        <th>Tax</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @shared_expenses.any? %>
+        <% @shared_expenses.each do |expense| %>
+          <tr>
+            <td><%= link_to expense.expense_name, expense_path(expense), class: "text-decoration-none" %></td>
+            <td><%= expense.created_by.name || expense.created_by.email %></td>
+            <td><%= number_to_currency(expense.total_amount_of_expense, unit: "₹") %></td>
+            <td><%= number_to_currency(expense.tax_on_expense, unit: "₹") %></td>
+            <td><%= expense.created_at.strftime("%d %b %Y") %></td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr><td colspan="5" class="text-center text-muted">No shared expenses yet</td></tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="mt-4">
+    <% suggested = (@balance && @balance[:net_balance].nonzero?) ? @balance[:net_balance].abs : nil %>
+    <%= link_to "Settle Up",
+                new_payment_path(payment_to: @friend.id, amount: suggested),
+                class: "btn btn-success me-2" %>
+    <%= link_to "Back to Dashboard", root_path, class: "btn btn-secondary" %>
+  </div>
+</div>

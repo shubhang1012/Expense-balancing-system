@@ -1,0 +1,28 @@
+<div class="container mt-5">
+  <h3>Record a Payment</h3>
+
+  <%= form_with model: @payment, local: true do |f| %>
+    <div class="mb-3">
+      <%= f.label :payment_to_id, "Paid To" %>
+      <%= f.collection_select :payment_to_id,
+          User.where.not(id: current_user.id), :id, :name,
+          { selected: params[:payment_to] },
+          class: "form-select" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :amount_paid %>
+      <div class="input-group">
+        <span class="input-group-text">₹</span>
+        <%= f.number_field :amount_paid, step: 0.01, value: params[:amount], class: "form-control" %>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :note, "Optional Note" %>
+      <%= f.text_area :note, rows: 2, class: "form-control" %>
+    </div>
+
+    <%= f.submit "Save Payment", class: "btn btn-success" %>
+  <% end %>
+</div>

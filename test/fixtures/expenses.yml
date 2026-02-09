@@ -1,0 +1,11 @@
+one:
+  created_by: one
+  expense_name: Test Expense
+  tax_on_expense: 0.0
+  total_amount_of_expense: 0.0
+
+two:
+  created_by: two
+  expense_name: Another Expense
+  tax_on_expense: 0.0
+  total_amount_of_expense: 0.0

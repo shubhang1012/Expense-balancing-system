@@ -1,0 +1,13 @@
+one:
+  paid_from_user: one
+  paid_to_user: two
+  amount: 10.00
+  entry_by: Expense
+  entry_by_id: 1
+
+two:
+  paid_from_user: two
+  paid_to_user: one
+  amount: 5.00
+  entry_by: Payment
+  entry_by_id: 1

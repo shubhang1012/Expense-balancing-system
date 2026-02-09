@@ -1,0 +1,45 @@
+<%= form_with(model: @expense, local: true) do |f| %>
+  <div class="mb-3">
+    <%= f.label :expense_name %>
+    <%= f.text_field :expense_name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :tax_on_expense, "Tax" %>
+    <%= f.number_field :tax_on_expense, step: 0.01, class: "form-control" %>
+  </div>
+
+  <h5>Expense Items</h5>
+  <%= f.fields_for :expense_items do |item_form| %>
+    <div class="border p-3 mb-2 rounded">
+      <div class="mb-2">
+        <%= item_form.label :name_of_item_in_expense, "Item Name" %>
+        <%= item_form.text_field :name_of_item_in_expense, class: "form-control" %>
+      </div>
+
+      <div class="mb-2">
+        <%= item_form.label :amount_of_item, "Amount" %>
+        <%= item_form.number_field :amount_of_item, step: 0.01, class: "form-control" %>
+      </div>
+
+      <div class="mb-2">
+        <%= item_form.label :assigned_to_user_id, "Assign To" %>
+        <%= item_form.collection_select :assigned_to_user_id, User.all, :id, :name, { include_blank: "Shared" }, class: "form-select" %>
+      </div>
+    </div>
+  <% end %>
+
+  <hr>
+
+  <h5>Select Participants</h5>
+  <% User.all.each do |user| %>
+    <div class="form-check">
+      <%= check_box_tag "participant_ids[]", user.id, user == current_user, class: "form-check-input", disabled: (user == current_user) %>
+      <%= label_tag "participant_ids_#{user.id}", user.name.presence || user.email, class: "form-check-label" %>
+    </div>
+  <% end %>
+
+  <div class="mt-4">
+    <%= f.submit "Create Expense", class: "btn btn-primary" %>
+  </div>
+<% end %>

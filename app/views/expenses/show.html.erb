@@ -1,0 +1,51 @@
+<div class="container mt-4">
+  <h3><%= @expense.expense_name %></h3>
+
+  <div class="row my-3">
+    <div class="col-md-3"><strong>Total Amount:</strong> <%= number_to_currency(@expense.total_amount_of_expense, unit: "₹") %></div>
+    <div class="col-md-3"><strong>Tax:</strong> <%= number_to_currency(@expense.tax_on_expense, unit: "₹") %></div>
+    <div class="col-md-3"><strong>Created By:</strong> <%= @expense.created_by.name || @expense.created_by.email %></div>
+    <div class="col-md-3"><strong>Date:</strong> <%= @expense.created_at.strftime("%d %b %Y") %></div>
+  </div>
+
+  <h5>Expense Items</h5>
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Item Name</th>
+        <th>Amount</th>
+        <th>Assigned To</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @expense_items.each do |item| %>
+        <tr>
+          <td><%= item.name_of_item_in_expense %></td>
+          <td><%= number_to_currency(item.amount_of_item, unit: "₹") %></td>
+          <td><%= item.assigned_to_user&.name || "Shared" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h5>Participants & Shares</h5>
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th>Share Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @participants.each do |p| %>
+        <% participation = @expense.expense_participations.find { |ep| ep.user_id == p.id } %>
+        <tr>
+          <td><%= p.name.presence || p.email %></td>
+          <td><%= number_to_currency(participation&.share_amount_of_user || @expense.share_per_person, unit: "₹") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= link_to "Back to Dashboard", root_path, class: "btn btn-primary" %>
+</div>

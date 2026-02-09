@@ -1,0 +1,67 @@
+<div class="container mt-5">
+  <h2 class="mb-4">
+    Welcome, <%= current_user.name.presence || current_user.email %>!
+  </h2>
+
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card p-3 text-center shadow-sm">
+        <h5>Total Due to You</h5>
+        <p class="h4 text-success"><%= number_to_currency(@total_due_to_you, unit: "₹") %></p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card p-3 text-center shadow-sm">
+        <h5>Total You Owe</h5>
+        <p class="h4 text-danger"><%= number_to_currency(@total_you_owe, unit: "₹") %></p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card p-3 text-center shadow-sm">
+        <h5>Net Balance</h5>
+        <p class="h4 <%= @net_balance >= 0 ? 'text-success' : 'text-danger' %>">
+          <%= number_to_currency(@net_balance, unit: "₹") %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <h4>Your Balances with Friends</h4>
+  <table class="table mt-3 table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Friend</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @balances.present? %>
+        <% @balances.sort_by { |b| -b[:net_balance].abs }.each do |b| %>
+          <tr>
+            <td>
+              <%= link_to(b[:friend].name.presence || b[:friend].email, friend_path(b[:friend]), class: "text-decoration-none") %>
+            </td>
+            <td class="<%= b[:net_balance] >= 0 ? 'text-success' : 'text-danger' %>">
+              <% if b[:net_balance] >= 0 %>
+                They owe you <%= number_to_currency(b[:net_balance], unit: "₹") %>
+              <% else %>
+                You owe <%= number_to_currency(b[:net_balance].abs, unit: "₹") %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr>
+          <td colspan="2" class="text-center text-muted">No balances to display yet</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="mt-4">
+    <%= link_to "Add Expense", new_expense_path, class: "btn btn-primary me-2" %>
+    <%= link_to "Record Payment", new_payment_path, class: "btn btn-success" %>
+  </div>
+</div>
